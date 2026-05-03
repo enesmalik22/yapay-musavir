@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# Sanal ortam
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Hassas bilgiler
+.env
+.env.local
+
+# Veritabani
+*.db
+*.sqlite
+*.sqlite3
+
+# Kullanici verileri (gizlilik kritik)
+data/uploads/
+data/processed/
+data/user_invoices/
+*.csv
+*.pdf
+*.xlsx
+*.jpg
+*.jpeg
+*.png
+
+# Istisnalar (örnek dosyalar git'e gidebilir)
+!data/sample_invoices/sample_*.pdf
+!data/sample_invoices/sample_*.png
+!docs/screenshots/*.png
+!docs/screenshots/*.jpg
+
+# Loglar
+*.log
+logs/
+
+# Mac
+.DS_Store
