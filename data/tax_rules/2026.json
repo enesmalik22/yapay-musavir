@@ -1,0 +1,85 @@
+{
+  "yil": 2026,
+  "gecerlilik_baslangic": "2026-01-01",
+  "yeniden_degerleme_orani": 25.49,
+  
+  "kaynaklar": [
+    "Hazine ve Maliye Bakanligi 2026 vergi tebligi (Resmi Gazete)",
+    "https://www.alomaliye.com/2025/12/31/2026-yili-vergi-dilimleri/",
+    "https://www.kolaybi.com/blog/2026-gelir-vergisi-dilimleri-ve-hesaplama-rehberi"
+  ],
+  
+  "son_dogrulama_tarihi": "2026-05-04",
+  "uyari": "Vergi oranlari resmi kaynaklardan dogrulanmistir, ancak mevzuat degisiklikleri olabilir. Kullanim oncesi mali musavirinizden teyit alin.",
+  
+  "kdv_oranlari": {
+    "genel": 20,
+    "indirimli": 10,
+    "temel": 1,
+    "ihracat": 0
+  },
+  
+  "gelir_vergisi_dilimleri_serbest_meslek": [
+    {"alt_sinir": 0,        "ust_sinir": 190000,   "oran": 15},
+    {"alt_sinir": 190000,   "ust_sinir": 400000,   "oran": 20},
+    {"alt_sinir": 400000,   "ust_sinir": 1000000,  "oran": 27},
+    {"alt_sinir": 1000000,  "ust_sinir": 5300000,  "oran": 35},
+    {"alt_sinir": 5300000,  "ust_sinir": null,     "oran": 40}
+  ],
+  
+  "gelir_vergisi_dilimleri_ucret": [
+    {"alt_sinir": 0,        "ust_sinir": 190000,   "oran": 15},
+    {"alt_sinir": 190000,   "ust_sinir": 400000,   "oran": 20},
+    {"alt_sinir": 400000,   "ust_sinir": 1500000,  "oran": 27},
+    {"alt_sinir": 1500000,  "ust_sinir": 5300000,  "oran": 35},
+    {"alt_sinir": 5300000,  "ust_sinir": null,     "oran": 40}
+  ],
+  
+  "stopaj_oranlari": {
+    "serbest_meslek_yurtici": 20,
+    "serbest_meslek_yurtdisi": 0,
+    "isyeri_kira": 20,
+    "konut_kira": 0
+  },
+  
+  "kdv_istisnalari": {
+    "yurtdisi_hizmet_ihracati_kdv": 0,
+    "kdv_iade_alt_siniri": 164000
+  },
+  
+  "istisnalar": {
+    "konut_kira_istisnasi_yillik": 47000,
+    "asgari_ucret_brut_aylik": 33030
+  },
+  
+  "varsayilan_kategoriler": [
+    {"ad": "Yazilim ve Abonelikler",   "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Cloud, SaaS, yazilim lisanslari"},
+    {"ad": "Yemek",                     "tip": "gider", "kdv_orani": 10, "dusulebilir": true,  "aciklama": "Restoran, kafe (yemek hizmeti %10 KDV)"},
+    {"ad": "Ulasim",                    "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Yakit, taksi, otobus"},
+    {"ad": "Konaklama",                 "tip": "gider", "kdv_orani": 10, "dusulebilir": true,  "aciklama": "Otel, is seyahati"},
+    {"ad": "Iletisim",                  "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Internet, telefon faturalari"},
+    {"ad": "Kirtasiye ve Ofis",         "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Ofis malzemeleri"},
+    {"ad": "Egitim",                    "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Kurs, kitap, sertifika"},
+    {"ad": "Donanim",                   "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Bilgisayar, monitor, telefon"},
+    {"ad": "Banka ve Finansman",        "tip": "gider", "kdv_orani": 0,  "dusulebilir": true,  "aciklama": "Banka komisyonlari (KDV istisna)"},
+    {"ad": "Vergi ve Resmi Odemeler",   "tip": "gider", "kdv_orani": 0,  "dusulebilir": false, "aciklama": "Vergi, harc, ceza (gider yazilamaz)"},
+    {"ad": "Pazarlama ve Reklam",       "tip": "gider", "kdv_orani": 20, "dusulebilir": true,  "aciklama": "Sosyal medya reklami, tanitim"},
+    {"ad": "Diger Gider",               "tip": "gider", "kdv_orani": 20, "dusulebilir": false, "aciklama": "Kategorize edilmemis"},
+    
+    {"ad": "Yazilim Hizmeti (Yurtici)", "tip": "gelir", "kdv_orani": 20, "stopaj_orani": 20, "aciklama": "Turkiye icindeki musterilere yazilim hizmeti"},
+    {"ad": "Yazilim Hizmeti (Yurtdisi)","tip": "gelir", "kdv_orani": 0,  "stopaj_orani": 0,  "aciklama": "Hizmet ihracati - KDV ve stopaj %0"},
+    {"ad": "Tasarim Hizmeti (Yurtici)", "tip": "gelir", "kdv_orani": 20, "stopaj_orani": 20, "aciklama": "Grafik, UI, web tasarim"},
+    {"ad": "Tasarim Hizmeti (Yurtdisi)","tip": "gelir", "kdv_orani": 0,  "stopaj_orani": 0,  "aciklama": "Hizmet ihracati"},
+    {"ad": "Danismanlik (Yurtici)",     "tip": "gelir", "kdv_orani": 20, "stopaj_orani": 20, "aciklama": "Genel danismanlik hizmetleri"},
+    {"ad": "Danismanlik (Yurtdisi)",    "tip": "gelir", "kdv_orani": 0,  "stopaj_orani": 0,  "aciklama": "Hizmet ihracati"},
+    {"ad": "Egitim Hizmeti",            "tip": "gelir", "kdv_orani": 20, "stopaj_orani": 20, "aciklama": "Kurs, ders, mentorluk"},
+    {"ad": "Diger Gelir",               "tip": "gelir", "kdv_orani": 20, "stopaj_orani": 20, "aciklama": "Diger hizmet gelirleri"}
+  ],
+  
+  "notlar": [
+    "Bu dosya 2026 yili vergi mevzuatini yansitir, mevzuat degisiklikleri icin yeni JSON dosyasi eklenmelidir",
+    "Yurtdisi hizmet ihracatinda KDV %0 ve stopaj yoktur (firma yabanci oldugu icin)",
+    "Stopaj sadece kurumsal mukelleflerden alinan gelir icindir, nihai tuketiciden alinmaz",
+    "Mali musavirinizle dogrulamadan kullanmayin"
+  ]
+}
