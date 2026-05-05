@@ -100,15 +100,11 @@ with col3:
 st.divider()
 
 with st.sidebar:
-    st.title("YapayMusavir")
-    st.markdown("**Ana Sayfa** (buradasin)")
-    st.markdown("Gider Ekle (yakinda)")
-    st.markdown("Gelir Ekle (yakinda)")
-
-    if st.button("Verileri Yenile"):
+    st.markdown("---")
+    
+    if st.button("🔄 Verileri Yenile", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
-
-    st.caption("Bu uygulama mali musavir yerine gecmez.")
-
+    
+    st.caption("⚠️ Bu uygulama mali musavir yerine gecmez.")
 st.info("Uygulamanin ilerleyen versiyonlarinda gider/gelir ekleme eklenecek.")
