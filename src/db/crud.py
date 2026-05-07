@@ -1,7 +1,5 @@
 """
 CRUD fonksiyonlari - Create, Read, Update, Delete
-
-Veritabani islemleri icin merkezi API. UI, agent ve testler buradan cagirir.
 """
 
 from datetime import date
@@ -13,20 +11,10 @@ from src.db.models import Kategori, Musteri, Gider, Gelir
 
 
 # ============================================================================
-# KATEGORI ISLEMLERI
+# KATEGORI
 # ============================================================================
 
 def kategori_listele(db: Session, tip: Optional[str] = None) -> List[Kategori]:
-    """
-    Kategorileri listele.
-    
-    Args:
-        db: Veritabani session
-        tip: 'gider' veya 'gelir' filtreleme icin (opsiyonel)
-    
-    Returns:
-        Kategori listesi
-    """
     query = db.query(Kategori)
     if tip:
         query = query.filter(Kategori.tip == tip)
@@ -34,12 +22,11 @@ def kategori_listele(db: Session, tip: Optional[str] = None) -> List[Kategori]:
 
 
 def kategori_getir(db: Session, kategori_id: int) -> Optional[Kategori]:
-    """Belirli bir kategoriyi ID ile getir."""
     return db.query(Kategori).filter(Kategori.id == kategori_id).first()
 
 
 # ============================================================================
-# MUSTERI ISLEMLERI
+# MUSTERI
 # ============================================================================
 
 def musteri_ekle(
@@ -52,7 +39,6 @@ def musteri_ekle(
     yurtdisi: bool = False,
     notlar: Optional[str] = None
 ) -> Musteri:
-    """Yeni musteri ekle."""
     musteri = Musteri(
         ad=ad,
         vkn_tckn=vkn_tckn,
@@ -69,17 +55,15 @@ def musteri_ekle(
 
 
 def musteri_listele(db: Session) -> List[Musteri]:
-    """Tum musterileri listele."""
     return db.query(Musteri).order_by(Musteri.ad).all()
 
 
 def musteri_getir(db: Session, musteri_id: int) -> Optional[Musteri]:
-    """Belirli bir musteriyi ID ile getir."""
     return db.query(Musteri).filter(Musteri.id == musteri_id).first()
 
 
 # ============================================================================
-# GIDER ISLEMLERI
+# GIDER
 # ============================================================================
 
 def gider_ekle(
@@ -97,22 +81,26 @@ def gider_ekle(
 ) -> Gider:
     """
     Yeni gider ekle.
-    
-    KDV tutari ve toplam otomatik hesaplanir.
+    Kullanici KDV DAHIL tutar giriyor.
+    Sistem KDV tutarini ve KDV haric tutari otomatik hesaplar.
     """
-    tutar = Decimal(str(tutar))
-    kdv_orani = Decimal(str(kdv_orani))
+    toplam_tutar = Decimal(str(tutar))
+    kdv_orani_d = Decimal(str(kdv_orani))
 
-    kdv_tutari = tutar * (kdv_orani / Decimal("100"))
-    toplam_tutar = tutar + kdv_tutari
-    
+    if kdv_orani_d > 0:
+        kdv_tutari = toplam_tutar - (toplam_tutar / (1 + kdv_orani_d / Decimal("100")))
+    else:
+        kdv_tutari = Decimal("0")
+
+    tutar_kdv_haric = toplam_tutar - kdv_tutari
+
     gider = Gider(
         tarih=tarih,
         satici=satici,
         satici_vkn=satici_vkn,
         kategori_id=kategori_id,
-        tutar=tutar,
-        kdv_orani=kdv_orani,
+        tutar=tutar_kdv_haric,
+        kdv_orani=kdv_orani_d,
         kdv_tutari=kdv_tutari,
         toplam_tutar=toplam_tutar,
         aciklama=aciklama,
@@ -132,29 +120,17 @@ def gider_listele(
     bitis_tarihi: Optional[date] = None,
     kategori_id: Optional[int] = None
 ) -> List[Gider]:
-    """
-    Giderleri listele (opsiyonel filtrelerle).
-    
-    Args:
-        db: Veritabani session
-        baslangic_tarihi: Bu tarihten sonraki giderler
-        bitis_tarihi: Bu tarihten onceki giderler
-        kategori_id: Belirli kategoriye ait giderler
-    """
     query = db.query(Gider)
-    
     if baslangic_tarihi:
         query = query.filter(Gider.tarih >= baslangic_tarihi)
     if bitis_tarihi:
         query = query.filter(Gider.tarih <= bitis_tarihi)
     if kategori_id:
         query = query.filter(Gider.kategori_id == kategori_id)
-    
     return query.order_by(Gider.tarih.desc()).all()
 
 
 def gider_sil(db: Session, gider_id: int) -> bool:
-    """Gideri sil. Basarili ise True doner."""
     gider = db.query(Gider).filter(Gider.id == gider_id).first()
     if gider:
         db.delete(gider)
@@ -164,7 +140,7 @@ def gider_sil(db: Session, gider_id: int) -> bool:
 
 
 # ============================================================================
-# GELIR ISLEMLERI
+# GELIR
 # ============================================================================
 
 def gelir_ekle(
@@ -182,26 +158,31 @@ def gelir_ekle(
 ) -> Gelir:
     """
     Yeni gelir ekle.
-    
-    KDV, stopaj ve net tahsilat otomatik hesaplanir.
+    Kullanici KDV DAHIL tutar giriyor.
+    Sistem KDV, stopaj ve net tahsilati otomatik hesaplar.
     """
-    tutar = Decimal(str(tutar))
-    kdv_orani = Decimal(str(kdv_orani))
+    toplam_tutar = Decimal(str(tutar))
+    kdv_orani_d = Decimal(str(kdv_orani))
+    stopaj_orani_d = Decimal(str(stopaj_orani))
 
-    kdv_tutari = tutar * (kdv_orani / Decimal("100"))
-    toplam_tutar = tutar + kdv_tutari
-    stopaj_tutari = tutar * (stopaj_orani / 100)
+    if kdv_orani_d > 0:
+        kdv_tutari = toplam_tutar - (toplam_tutar / (1 + kdv_orani_d / Decimal("100")))
+    else:
+        kdv_tutari = Decimal("0")
+
+    tutar_kdv_haric = toplam_tutar - kdv_tutari
+    stopaj_tutari = tutar_kdv_haric * (stopaj_orani_d / Decimal("100"))
     net_tahsilat = toplam_tutar - stopaj_tutari
-    
+
     gelir = Gelir(
         tarih=tarih,
         musteri_id=musteri_id,
         kategori_id=kategori_id,
         fatura_no=fatura_no,
-        tutar=tutar,
-        kdv_orani=kdv_orani,
+        tutar=tutar_kdv_haric,
+        kdv_orani=kdv_orani_d,
         kdv_tutari=kdv_tutari,
-        stopaj_orani=stopaj_orani,
+        stopaj_orani=stopaj_orani_d,
         stopaj_tutari=stopaj_tutari,
         toplam_tutar=toplam_tutar,
         net_tahsilat=net_tahsilat,
@@ -222,9 +203,7 @@ def gelir_listele(
     musteri_id: Optional[int] = None,
     odendi: Optional[bool] = None
 ) -> List[Gelir]:
-    """Gelirleri listele (opsiyonel filtrelerle)."""
     query = db.query(Gelir)
-    
     if baslangic_tarihi:
         query = query.filter(Gelir.tarih >= baslangic_tarihi)
     if bitis_tarihi:
@@ -233,12 +212,10 @@ def gelir_listele(
         query = query.filter(Gelir.musteri_id == musteri_id)
     if odendi is not None:
         query = query.filter(Gelir.odendi == odendi)
-    
     return query.order_by(Gelir.tarih.desc()).all()
 
 
 def gelir_odendi_isaretle(db: Session, gelir_id: int, odeme_tarihi: date) -> Optional[Gelir]:
-    """Geliri 'odendi' olarak isaretle."""
     gelir = db.query(Gelir).filter(Gelir.id == gelir_id).first()
     if gelir:
         gelir.odendi = True
